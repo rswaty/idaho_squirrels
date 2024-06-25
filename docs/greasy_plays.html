@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Randy Swaty–with code from Joel" />
+
+<meta name="date" content="2024-06-25" />
+
+<title>Greasy Plays</title>
+
+<script src="site_libs/header-attrs-2.27.1/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/jqueryui-1.13.2/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/main/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "\e258";
+  font-family: 'Glyphicons Halflings';
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">joel_tovar</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="greasy_plays.html">Greasy Plays</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Greasy Plays</h1>
+<h4 class="author">Randy Swaty–with code from Joel</h4>
+<h4 class="date">2024-06-25</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+workflowr <span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2024-06-25
+</p>
+<p>
+<strong>Checks:</strong> <span
+class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7
+<span class="glyphicon glyphicon-exclamation-sign text-danger"
+aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>joel_tovar/</code> <span
+class="glyphicon glyphicon-question-sign" aria-hidden="true"
+title="This is the local directory in which the code in this file was executed.">
+</span>
+</p>
+<p>
+This reproducible <a href="https://rmarkdown.rstudio.com">R Markdown</a>
+analysis was created with <a
+  href="https://github.com/workflowr/workflowr">workflowr</a> (version
+1.7.1). The <em>Checks</em> tab describes the reproducibility checks
+that were applied when the results were created. The <em>Past
+versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date
+</a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git
+repository, you know the exact version of the code that produced these
+results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the
+global environment can affect the analysis in your R Markdown file in
+unknown ways. For reproduciblity it’s best to always run the code in an
+empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20240625code">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Seed:</strong>
+<code>set.seed(20240625)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20240625code"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20240625)</code> was run prior to running
+the code in the R Markdown file. Setting a seed ensures that any results
+that rely on randomness, e.g. subsampling or permutations, are
+reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Session information:</strong>
+recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package
+versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be
+confident that you successfully produced the results during this
+run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr
+project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong6b3b428">
+<span class="glyphicon glyphicon-ok text-success"
+aria-hidden="true"></span> <strong>Repository version:</strong> 6b3b428
+</a>
+</p>
+</div>
+<div id="strongRepositoryversionstrong6b3b428"
+class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development
+and connecting the code version to the results is critical for
+reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version 6b3b428.
+See the <em>Past versions</em> tab to see a history of the changes made
+to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for
+the analysis have been committed to Git prior to generating the results
+(you can use <code>wflow_publish</code> or
+<code>wflow_git_commit</code>). workflowr only checks the R Markdown
+file, but you know if there are other scripts or data files that it
+depends on. Below is the status of the Git repository when the results
+were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  data/Daubenmire_2018_ALL_RAW.xlsx
+
+Unstaged changes:
+    Modified:   analysis/_site.yml
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not
+included in this status report because it is ok for generated content to
+have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were
+made to the R Markdown (<code>analysis/greasy_plays.Rmd</code>) and HTML
+(<code>docs/greasy_plays.html</code>) files. If you’ve configured a
+remote Git repository (see <code>?wflow_git_remote</code>), click on the
+hyperlinks in the table below to view the files as they were in that
+past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+6b3b428
+</td>
+<td>
+rswaty
+</td>
+<td>
+2024-06-25
+</td>
+<td>
+Publish the initial files for myproject
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="goals" class="section level2">
+<h2>Goals</h2>
+<p>Over the years people have collected substantial amounts of data
+relevant to the Idahoan Striped Ground Squirrel, which is in decline.
+One hypothesis is that it does not compete with the more common common
+ground squirrel in areas of fire exclusion. Researchers and managers
+have implemented prescribed fire and thinning, and have conducted
+vegetation monitoring for years.</p>
+<p>Here, Greasy plays with data and code initially supplied by Joel
+Tovar in an attempt to ‘help’, i.e., make the code more efficient and/or
+reproducible.</p>
+</div>
+<div id="initial-code" class="section level2">
+<h2>Initial code</h2>
+<p>Below is Joel’s original code, pasted into the Conservation Data Lab
+Slack channel June 18, 2024. It is not run.</p>
+<pre class="r"><code>#Currently all the libraries I need
+library(readxl)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+#Reading in the 2018 Daub Data. You needed to specify the col_type because there were issues. Also transforming DF to a Tibble.
+DaubenmireData2018 &lt;- read_excel(&quot;C:/Users/joel8/Dropbox/My PC (LAPTOP-8RB752PH)/Desktop/School/Spring 24/Senior Research/Analysis Data/Daubenmire Data/Daubenmire_2018_ALL.xlsx&quot;, sheet=2, col_types=c(&#39;date&#39;,&#39;numeric&#39;,&#39;text&#39;,&#39;text&#39;,&#39;numeric&#39;,&#39;text&#39;,&#39;numeric&#39;,&#39;numeric&#39;,&#39;text&#39;,&#39;text&#39;,&#39;text&#39;,&#39;text&#39;,&#39;numeric&#39;,&#39;numeric&#39;,&#39;text&#39;))
+Daub2018 &lt;- as_tibble(DaubenmireData2018)
+#Subsetting CSW site &amp; removing unnecessary columns
+#Needed to rename &quot;Ground Cover (%) due to issues with special characters farther down
+CSW2018 &lt;- filter(Daub2018, Site%in% c(&#39;Cold Springs West&#39;))
+CSW2018 &lt;- select(CSW2018, -c(2,6,7,8))
+CSW2018 &lt;- CSW2018 %&gt;%
+  rename(
+    ground_cover = `Ground\r\nCover (%)`
+  )
+#Subsetting Huck site &amp; removing unnecessary columns
+Huck2018 &lt;- filter(Daub2018, Site%in% c(&#39;Huckleberry&#39;))
+Huck2018 &lt;- select(Huck2018, -c(2,6,7,8))
+#Subsetting Fawn site &amp; removing unnecessary columns
+Fawn2018 &lt;- filter(Daub2018, Site %in% c(&#39;Fawn Creek&#39;))
+Fawn2018 &lt;- select(Fawn2018, -c(2,6,7,8))
+#Subsetting LB2 site &amp; removing unnecessary columns
+LB2 &lt;- filter(Daub2018, Site%in% c(&#39;Lower Butter 2&#39;))
+LButter2018 &lt;- select(LB2, -c(2,6,7,8))
+#Subsetting Steve&#39;s Creek site &amp; removing unnecessary columns
+Steve2018 &lt;- filter(Daub2018, Site%in% c(&quot;Steve&#39;s Creek&quot;))
+Steve2018 &lt;- select(Steve2018, -c(2,6,7,8))
+#Subsetting Rocky Top site &amp; removing unnecessary columns
+Rocky2018 &lt;- filter(Daub2018, Site%in% c(&#39;Rocky Top&#39;))
+Rocky2018 &lt;- select(Rocky2018, -c(2,6,7,8))
+#Subsetting Slaughter Gulch site &amp; removing unnecessary columns
+Slaughter &lt;- filter(Daub2018, Site%in% c(&#39;Slaughter Gulch&#39;))
+Slaughter2018 &lt;- select(Slaughter, -c(2,6,7,8))
+#Subsetting YCC site &amp; removing unnecessary columns
+YCC &lt;- filter(Daub2018, Site%in% c(&#39;YCC&#39;))
+YCC2018 &lt;- select(YCC, -c(2,6,7,8))
+#Subsetting Tamarack East site &amp; removing unnecessary columns
+Tamarack &lt;- filter(Daub2018, Site%in% c(&#39;Tamarack East&#39;))
+Tamarack2018 &lt;- select(Tamarack, -c(2,6,7,8))
+#############################################################################
+#1st attempt to analyze CSW2018 data
+#Mutating &#39;Family, Genus, Species&#39; in order to create presence/absence matrix
+CSW2018 &lt;- CSW2018 %&gt;%
+  mutate(Species_ID= paste(Family, Genus, Species, sep=&quot;_&quot;))
+#Describing Presence/Absence of species by site
+#Objects in the env. with &#39;PA_&#39; indicate a Presence/Absence matrix
+PA_CSW2018 &lt;- CSW2018 %&gt;%
+  mutate(Presence = ifelse(ground_cover &gt; 0,1,0))
+#Separated this script due to some errors. likely due to the order of operations or something.
+#Created a P/A matrix using this script combined with the two lines above
+PA_CSW2018 &lt;- PA_CSW2018 %&gt;%
+  select(Plot,Quadrat,Class,Species_ID,Presence) %&gt;%
+  pivot_wider(names_from = Species_ID, values_from = Presence, values_fill = list(Presence= 0))
+#Calculating Species Richness &#39;SR_&#39; of CSW2018 using the PA matrix created above
+SR_CSW2018 &lt;- PA_CSW2018 %&gt;%
+  summarize(across(everything(),~sum(. &gt;0))) %&gt;%
+  summarise(Richness= sum(.))
+#Calculating Species Frequency &#39;SF_&#39; of the community composition
+SF_CSW2018 &lt;- PA_CSW2018 %&gt;%
+  summarise(across(everything(), mean)) %&gt;%
+  pivot_longer(cols= -Quadrat, names_to = &#39;Species&#39;, values_to = &#39;Frequency&#39;)</code></pre>
+</div>
+<div id="greasys-thoughts-and-data-processing-steps"
+class="section level2">
+<h2>Greasy’s thoughts and data processing steps</h2>
+<div id="project-and-data-management" class="section level3">
+<h3>Project and data management</h3>
+<p>It may be overkill (indeed it is), but I decided to set up a
+workflowr site for this exploration to enforce reproducibility, e.g.,
+all code is accessible, and all ‘parts’ are in one place. Additionally,
+a sensible organizational structure is set up and it allows for
+quick/easy iteration and sharing. Further, everything is backed up on
+GitHub. There are downsides to this approach, including additional
+complexity and challenges for collaborators who do not code. They may
+prefer Excel.</p>
+<p>With the data I took a few initial steps before even reading into
+R:</p>
+<ol style="list-style-type: decimal">
+<li>Downloaded original dataset from Slack.<br />
+</li>
+<li>Opened the dataset in Excel to quickly explore. Turned off all
+filters (I am superstitious), then saved into the ‘data’ subdirectory
+with “RAW” added to the name. This file will not be altered in any
+way.</li>
+</ol>
+<p>By storing the data there, I can zip the whole project directory and
+send to a collaborator and all file paths will work. Or better yet, they
+can clone, branch or fork the repo from GitHub and have all of the
+files.</p>
+</div>
+<div id="the-code-in-general" class="section level3">
+<h3>The code in general</h3>
+<p>The code was shared via Slack, so formatting may have been altered.
+As pasted into this file from Slack, a few things jumped out:</p>
+<ol style="list-style-type: decimal">
+<li>Nice comments!</li>
+<li>Taking a ‘tidyverse’ approach, vs. base R or other. Just a note.
+This is totally fine IMHO, and probably the best as there may be more
+support online for tidyverse these days, and more users.</li>
+<li>As noted above the formatting may have been altered through the
+copy-paste to Slack-copy-paste here steps. It is very hard to read as
+is, needing vertical spaces between steps at the least.<br />
+</li>
+<li>If using a standalone script make sure to add your name, goals and
+date at the least to the top.</li>
+<li>Pick a case, e.g., “snake_case” or “camelCase” and run with it. You
+currently have multiple types which can be slower to type and read.</li>
+</ol>
+</div>
+<div id="dependancies" class="section level3">
+<h3>Dependancies</h3>
+<p>In general it is a good idea to get packages and data loaded right
+away, which you did. I will use a separate code chuck for this. A few
+notes about this:</p>
+<ul>
+<li>Tidyverse is a set of packages, including ‘dplyr’ and ‘tidyr’. I
+removed loading those packages since loading ‘tidyverse’ will load
+them.</li>
+<li>I added the ‘formatR’ package to format your code. Most I did not
+want to manually reformat. Let me know what you think. See more at <a
+href="https://yihui.org/formatr/"
+class="uri">https://yihui.org/formatr/</a></li>
+</ul>
+<p><strong>Ask Myles Walimaa how to deal with the dates as they are
+wack</strong></p>
+<pre class="r"><code># Load necessary libraries
+library(readxl)
+library(tidyverse)
+library(janitor) # used to clean up column names
+
+# Read in raw data without column names since there are 2 rows of headers we need to deal with
+raw_2018 &lt;- read_excel(&quot;data/Daubenmire_2018_ALL_RAW.xlsx&quot;, sheet = &quot;Sheet2&quot;, col_names = FALSE)
+
+# Concatenate first two rows with a &quot;_&quot; as separator and remove top two rows
+names(raw_2018) &lt;- paste(raw_2018[2, ], raw_2018[1, ], sep = &quot;_&quot;)
+raw_2018 &lt;- raw_2018[-c(1:2), ]
+
+# Remove &#39;_NA&#39; from header
+names(raw_2018) &lt;- gsub(&quot;_NA&quot;, &quot;&quot;, names(raw_2018))
+
+# Print the cleaned dataframe
+print(head(raw_2018))</code></pre>
+<pre><code># A tibble: 6 × 312
+  Date  Session Site  Plot  `Observer(s)` Comments Quadrat A.4_BG A.5_BSC A.6_LT
+  &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;         &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;   &lt;chr&gt; 
+1 43277 17      Cap … Burn  CH,AM         &lt;NA&gt;     1       28     8       5     
+2 43277 17      Cap … Burn  AA            &lt;NA&gt;     2       0      5       40    
+3 43277 17      Cap … Burn  AA            &lt;NA&gt;     3       20     1       30    
+4 43277 17      Cap … Burn  CH, AM        &lt;NA&gt;     4       5      4       30    
+5 43277 17      Cap … Burn  AA            &lt;NA&gt;     5       40     5       15    
+6 43277 17      Cap … Burn  AA            Large s… 6       10     1       25    
+# ℹ 302 more variables: `Forb_Achillea millefolium` &lt;chr&gt;,
+#   `Forb_Agastache urticifolia` &lt;chr&gt;, `Forb_Agoseris spp.` &lt;chr&gt;,
+#   `Forb_Alberta penstemon` &lt;chr&gt;, `Forb_Allium acuminatum` &lt;chr&gt;,
+#   `Forb_Allium brandegeei` &lt;chr&gt;, `Forb_Allium fibrillum` &lt;chr&gt;,
+#   `Forb_Allium tolmiei` &lt;chr&gt;, `Forb_Alyssum alyssoides` &lt;chr&gt;,
+#   `Forb_Anaphalis margaritacea` &lt;chr&gt;, `Forb_Anemone piperi` &lt;chr&gt;,
+#   `Forb_Antennaria luzuloides` &lt;chr&gt;, `Forb_Antennaria microphylla` &lt;chr&gt;, …</code></pre>
+</div>
+<div id="wrangle-data" class="section level3">
+<h3>Wrangle data</h3>
+<p>It looks like you want to remove the same columns for the entire
+dataset, then do some subsetting, etc. We can make this a bit more
+efficient.</p>
+<p>Also-I am a bit superstitious about using index values to remove
+columns. This assumes columns are always in the same order. That said,
+your column names may change depending on the input data so you may have
+used the best approach with index names.</p>
+<pre class="r"><code># Function to subset and remove unnecessary columns
+subset_and_select &lt;- function(data, site_name) {
+  data %&gt;%
+    filter(Site %in% site_name) %&gt;%
+      select(-Session,
+         -Comments,
+         -Quadrat,
+         -A.4_BG) %&gt;%
+  clean_names() # you may or may not like this
+}
+
+# Apply the function to each site (you may want to change the df names)
+Huck2018 &lt;- subset_and_select(raw_2018, &#39;Huckleberry&#39;)
+Fawn2018 &lt;- subset_and_select(raw_2018, &#39;Fawn Creek&#39;)
+LButter2018 &lt;- subset_and_select(raw_2018, &#39;Lower Butter 2&#39;)
+Steve2018 &lt;- subset_and_select(raw_2018, &quot;Steve&#39;s Creek&quot;)
+Rocky2018 &lt;- subset_and_select(raw_2018, &#39;Rocky Top&#39;)
+Slaughter2018 &lt;- subset_and_select(raw_2018, &#39;Slaughter Gulch&#39;)
+YCC2018 &lt;- subset_and_select(raw_2018, &#39;YCC&#39;)
+Tamarack2018 &lt;- subset_and_select(raw_2018, &#39;Tamarack East&#39;)
+
+# Print the first few rows of one of the subsets to verify
+print(head(Huck2018))</code></pre>
+<pre><code># A tibble: 6 × 308
+  date  site        plot   observer_s a_5_bsc a_6_lt forb_achillea_millefolium
+  &lt;chr&gt; &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;      &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;                    
+1 43300 Huckleberry Forest AM, CH     5       75     0                        
+2 43300 Huckleberry Forest AM, CH     2       79     0                        
+3 43300 Huckleberry Forest AM, CH     3       68     0                        
+4 43300 Huckleberry Forest AM, CH     2       78     0                        
+5 43300 Huckleberry Forest AA         5       60     0                        
+6 43300 Huckleberry Forest AA         1       60     0                        
+# ℹ 301 more variables: forb_agastache_urticifolia &lt;chr&gt;,
+#   forb_agoseris_spp &lt;chr&gt;, forb_alberta_penstemon &lt;chr&gt;,
+#   forb_allium_acuminatum &lt;chr&gt;, forb_allium_brandegeei &lt;chr&gt;,
+#   forb_allium_fibrillum &lt;chr&gt;, forb_allium_tolmiei &lt;chr&gt;,
+#   forb_alyssum_alyssoides &lt;chr&gt;, forb_anaphalis_margaritacea &lt;chr&gt;,
+#   forb_anemone_piperi &lt;chr&gt;, forb_antennaria_luzuloides &lt;chr&gt;,
+#   forb_antennaria_microphylla &lt;chr&gt;, forb_antennaria_spp &lt;chr&gt;, …</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span>
+Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 4.2.2 Patched (2022-11-30 r83413 ucrt)
+Platform: x86_64-w64-mingw32/x64 (64-bit)
+Running under: Windows 10 x64 (build 22621)
+
+Matrix products: default
+
+locale:
+[1] LC_COLLATE=English_United States.utf8 
+[2] LC_CTYPE=English_United States.utf8   
+[3] LC_MONETARY=English_United States.utf8
+[4] LC_NUMERIC=C                          
+[5] LC_TIME=English_United States.utf8    
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] janitor_2.2.0    lubridate_1.9.3  forcats_1.0.0    stringr_1.5.1   
+ [5] dplyr_1.1.4.9000 purrr_1.0.2      readr_2.1.5      tidyr_1.3.1     
+ [9] tibble_3.2.1     ggplot2_3.5.1    tidyverse_2.0.0  readxl_1.4.3    
+[13] workflowr_1.7.1 
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_1.2.1  xfun_0.45         bslib_0.7.0       snakecase_0.11.1 
+ [5] colorspace_2.1-0  vctrs_0.6.5       generics_0.1.3    htmltools_0.5.8.1
+ [9] yaml_2.3.8        utf8_1.2.4        rlang_1.1.4       jquerylib_0.1.4  
+[13] later_1.3.2       pillar_1.9.0      glue_1.7.0        withr_3.0.0      
+[17] lifecycle_1.0.4   munsell_0.5.1     gtable_0.3.5      cellranger_1.1.0 
+[21] evaluate_0.24.0   knitr_1.47        tzdb_0.4.0        callr_3.7.6      
+[25] fastmap_1.2.0     httpuv_1.6.15     ps_1.7.6          fansi_1.0.6      
+[29] Rcpp_1.0.12       promises_1.3.0    scales_1.3.0      cachem_1.1.0     
+[33] jsonlite_1.8.8    fs_1.6.4          hms_1.1.3         digest_0.6.35    
+[37] stringi_1.8.4     processx_3.8.4    getPass_0.2-4     rprojroot_2.0.4  
+[41] grid_4.2.2        cli_3.6.2         tools_4.2.2       magrittr_2.0.3   
+[45] sass_0.4.9        whisker_0.4.1     pkgconfig_2.0.3   timechange_0.3.0 
+[49] rmarkdown_2.27.1  httr_1.4.7        rstudioapi_0.16.0 R6_2.5.1         
+[53] git2r_0.33.0      compiler_4.2.2   </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+https://docs.mathjax.org/en/latest/web/configuration.html. This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // temporarily add toc-ignore selector to headers for the consistency with Pandoc
+    $('.unlisted.unnumbered').addClass('toc-ignore')
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

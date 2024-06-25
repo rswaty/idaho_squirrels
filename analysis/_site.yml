@@ -1,0 +1,23 @@
+name: joel_tovar
+output_dir: ../docs
+navbar:
+  title: joel_tovar
+  left:
+  - text: Home
+    href: index.html
+  - text: Greasy Plays
+    href: greasy_plays.html
+  - text: About
+    href: about.html
+  - text: License
+    href: license.html
+  right:
+  - icon: fab fa-github
+    text: Source code
+    href: https://github.com/rswaty/joel_tovar
+output:
+  workflowr::wflow_html:
+    toc: yes
+    toc_float: yes
+    theme: cosmo
+    highlight: textmate

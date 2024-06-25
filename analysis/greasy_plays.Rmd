@@ -1,0 +1,191 @@
+---
+title: "Greasy Plays"
+author: "Randy Swaty--with code from Joel"
+date: "2024-06-25"
+output: workflowr::wflow_html
+editor_options:
+  chunk_output_type: console
+---
+
+## Goals
+
+Over the years people have collected substantial amounts of data relevant to the Idahoan Striped Ground Squirrel, which is in decline.  One hypothesis is that it does not compete with the more common common ground squirrel in areas of fire exclusion.  Researchers and managers have implemented prescribed fire and thinning, and have conducted vegetation monitoring for years.
+
+Here, Greasy plays with data and code initially supplied by Joel Tovar in an attempt to 'help', i.e., make the code more efficient and/or reproducible.
+
+
+## Initial code
+
+Below is Joel's original code, pasted into the Conservation Data Lab Slack channel June 18, 2024.  It is not run. 
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+#Currently all the libraries I need
+library(readxl)
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+#Reading in the 2018 Daub Data. You needed to specify the col_type because there were issues. Also transforming DF to a Tibble.
+DaubenmireData2018 <- read_excel("C:/Users/joel8/Dropbox/My PC (LAPTOP-8RB752PH)/Desktop/School/Spring 24/Senior Research/Analysis Data/Daubenmire Data/Daubenmire_2018_ALL.xlsx", sheet=2, col_types=c('date','numeric','text','text','numeric','text','numeric','numeric','text','text','text','text','numeric','numeric','text'))
+Daub2018 <- as_tibble(DaubenmireData2018)
+#Subsetting CSW site & removing unnecessary columns
+#Needed to rename "Ground Cover (%) due to issues with special characters farther down
+CSW2018 <- filter(Daub2018, Site%in% c('Cold Springs West'))
+CSW2018 <- select(CSW2018, -c(2,6,7,8))
+CSW2018 <- CSW2018 %>%
+  rename(
+    ground_cover = `Ground\r\nCover (%)`
+  )
+#Subsetting Huck site & removing unnecessary columns
+Huck2018 <- filter(Daub2018, Site%in% c('Huckleberry'))
+Huck2018 <- select(Huck2018, -c(2,6,7,8))
+#Subsetting Fawn site & removing unnecessary columns
+Fawn2018 <- filter(Daub2018, Site %in% c('Fawn Creek'))
+Fawn2018 <- select(Fawn2018, -c(2,6,7,8))
+#Subsetting LB2 site & removing unnecessary columns
+LB2 <- filter(Daub2018, Site%in% c('Lower Butter 2'))
+LButter2018 <- select(LB2, -c(2,6,7,8))
+#Subsetting Steve's Creek site & removing unnecessary columns
+Steve2018 <- filter(Daub2018, Site%in% c("Steve's Creek"))
+Steve2018 <- select(Steve2018, -c(2,6,7,8))
+#Subsetting Rocky Top site & removing unnecessary columns
+Rocky2018 <- filter(Daub2018, Site%in% c('Rocky Top'))
+Rocky2018 <- select(Rocky2018, -c(2,6,7,8))
+#Subsetting Slaughter Gulch site & removing unnecessary columns
+Slaughter <- filter(Daub2018, Site%in% c('Slaughter Gulch'))
+Slaughter2018 <- select(Slaughter, -c(2,6,7,8))
+#Subsetting YCC site & removing unnecessary columns
+YCC <- filter(Daub2018, Site%in% c('YCC'))
+YCC2018 <- select(YCC, -c(2,6,7,8))
+#Subsetting Tamarack East site & removing unnecessary columns
+Tamarack <- filter(Daub2018, Site%in% c('Tamarack East'))
+Tamarack2018 <- select(Tamarack, -c(2,6,7,8))
+#############################################################################
+#1st attempt to analyze CSW2018 data
+#Mutating 'Family, Genus, Species' in order to create presence/absence matrix
+CSW2018 <- CSW2018 %>%
+  mutate(Species_ID= paste(Family, Genus, Species, sep="_"))
+#Describing Presence/Absence of species by site
+#Objects in the env. with 'PA_' indicate a Presence/Absence matrix
+PA_CSW2018 <- CSW2018 %>%
+  mutate(Presence = ifelse(ground_cover > 0,1,0))
+#Separated this script due to some errors. likely due to the order of operations or something.
+#Created a P/A matrix using this script combined with the two lines above
+PA_CSW2018 <- PA_CSW2018 %>%
+  select(Plot,Quadrat,Class,Species_ID,Presence) %>%
+  pivot_wider(names_from = Species_ID, values_from = Presence, values_fill = list(Presence= 0))
+#Calculating Species Richness 'SR_' of CSW2018 using the PA matrix created above
+SR_CSW2018 <- PA_CSW2018 %>%
+  summarize(across(everything(),~sum(. >0))) %>%
+  summarise(Richness= sum(.))
+#Calculating Species Frequency 'SF_' of the community composition
+SF_CSW2018 <- PA_CSW2018 %>%
+  summarise(across(everything(), mean)) %>%
+  pivot_longer(cols= -Quadrat, names_to = 'Species', values_to = 'Frequency')
+```
+
+
+
+## Greasy's thoughts and data processing steps
+
+### Project and data management
+
+It may be overkill (indeed it is), but I decided to set up a workflowr site for this exploration to enforce reproducibility, e.g., all code is accessible, and all 'parts' are in one place.  Additionally, a sensible organizational structure is set up and it allows for quick/easy iteration and sharing.  Further, everything is backed up on GitHub.  There are downsides to this approach, including additional complexity and challenges for collaborators who do not code.  They may prefer Excel.
+
+With the data I took a few initial steps before even reading into R:
+
+1. Downloaded original dataset from Slack.  
+2. Opened the dataset in Excel to quickly explore.  Turned off all filters (I am superstitious), then saved into the 'data' subdirectory with "RAW" added to the name.  This file will not be altered in any way.  
+
+By storing the data there, I can zip the whole project directory and send to a collaborator and all file paths will work.  Or better yet, they can clone, branch or fork the repo from GitHub and have all of the files.
+
+
+
+
+### The code in general
+
+The code was shared via Slack, so formatting may have been altered.  As pasted into this file from Slack, a few things jumped out:
+
+1. Nice comments!
+2. Taking a 'tidyverse' approach, vs. base R or other.  Just a note.  This is totally fine IMHO, and probably the best as there may be more support online for tidyverse these days, and more users.
+3. As noted above the formatting may have been altered through the copy-paste to Slack-copy-paste here steps.  It is very hard to read as is, needing vertical spaces between steps at the least.  
+4. If using a standalone script make sure to add  your name, goals and date at the least to the top. 
+5. Pick a case, e.g., "snake_case" or "camelCase" and run with it.  You currently have multiple types which can be slower to type and read. 
+
+
+### Dependancies
+
+In general it is a good idea to get packages and data loaded right away, which you did.  I will use a separate code chuck for this.  A few notes about this:
+
+* Tidyverse is a set of packages, including 'dplyr' and 'tidyr'. I removed loading those packages since loading 'tidyverse' will load them.
+* I added the 'formatR' package to format your code.  Most I did not want to manually reformat.  Let me know what you think.  See more at https://yihui.org/formatr/
+
+
+**Ask Myles Walimaa how to deal with the dates as they are wack**
+
+
+
+
+```{r message=FALSE, warning=FALSE}
+# Load necessary libraries
+library(readxl)
+library(tidyverse)
+library(janitor) # used to clean up column names
+
+# Read in raw data without column names since there are 2 rows of headers we need to deal with
+raw_2018 <- read_excel("data/Daubenmire_2018_ALL_RAW.xlsx", sheet = "Sheet2", col_names = FALSE)
+
+# Concatenate first two rows with a "_" as separator and remove top two rows
+names(raw_2018) <- paste(raw_2018[2, ], raw_2018[1, ], sep = "_")
+raw_2018 <- raw_2018[-c(1:2), ]
+
+# Remove '_NA' from header
+names(raw_2018) <- gsub("_NA", "", names(raw_2018))
+
+# Print the cleaned dataframe
+print(head(raw_2018))
+
+```
+
+
+
+### Wrangle data
+
+It looks like you want to remove the same columns for the entire dataset, then do some subsetting, etc.  We can make this a bit more efficient.
+
+Also-I am a bit superstitious about using index values to remove columns.  This assumes columns are always in the same order.  That said, your column names may change depending on the input data so you may have used the best approach with index names.
+
+
+
+
+```{r}
+
+# Function to subset and remove unnecessary columns
+subset_and_select <- function(data, site_name) {
+  data %>%
+    filter(Site %in% site_name) %>%
+      select(-Session,
+         -Comments,
+         -Quadrat,
+         -A.4_BG) %>%
+  clean_names() # you may or may not like this
+}
+
+# Apply the function to each site (you may want to change the df names)
+Huck2018 <- subset_and_select(raw_2018, 'Huckleberry')
+Fawn2018 <- subset_and_select(raw_2018, 'Fawn Creek')
+LButter2018 <- subset_and_select(raw_2018, 'Lower Butter 2')
+Steve2018 <- subset_and_select(raw_2018, "Steve's Creek")
+Rocky2018 <- subset_and_select(raw_2018, 'Rocky Top')
+Slaughter2018 <- subset_and_select(raw_2018, 'Slaughter Gulch')
+YCC2018 <- subset_and_select(raw_2018, 'YCC')
+Tamarack2018 <- subset_and_select(raw_2018, 'Tamarack East')
+
+# Print the first few rows of one of the subsets to verify
+print(head(Huck2018))
+
+
+  
+
+
+```
+
