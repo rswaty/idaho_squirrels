@@ -1,4 +1,4 @@
-# joel_tovar
+# Idaho Ground Squirrels Veg Data Exploration
 
 A [workflowr][] project.
 
