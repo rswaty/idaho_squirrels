@@ -1,7 +1,7 @@
-name: joel_tovar
+name: Idaho Squirrels
 output_dir: ../docs
 navbar:
-  title: joel_tovar
+  title: Idaho Squirrels
   left:
   - text: Home
     href: index.html
