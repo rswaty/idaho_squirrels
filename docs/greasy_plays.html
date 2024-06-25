@@ -524,15 +524,15 @@ project makes it easier to run your code on other machines.</p>
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomrswatyidahosquirrelstreed40b1f9e4b1a2cd3ee65a1145711a9e49091469etargetblankd40b1f9a">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomrswatyidahosquirrelstree3a6dd2fbb81e71df38cde527aba0f9d0a6661298targetblank3a6dd2fa">
 <span class="glyphicon glyphicon-ok text-success"
 aria-hidden="true"></span> <strong>Repository version:</strong>
-<a href="https://github.com/rswaty/idaho_squirrels/tree/d40b1f9e4b1a2cd3ee65a1145711a9e49091469e" target="_blank">d40b1f9</a>
+<a href="https://github.com/rswaty/idaho_squirrels/tree/3a6dd2fbb81e71df38cde527aba0f9d0a6661298" target="_blank">3a6dd2f</a>
 </a>
 </p>
 </div>
 <div
-id="strongRepositoryversionstrongahrefhttpsgithubcomrswatyidahosquirrelstreed40b1f9e4b1a2cd3ee65a1145711a9e49091469etargetblankd40b1f9a"
+id="strongRepositoryversionstrongahrefhttpsgithubcomrswatyidahosquirrelstree3a6dd2fbb81e71df38cde527aba0f9d0a6661298targetblank3a6dd2fa"
 class="panel-collapse collapse">
 <div class="panel-body">
 <p>
@@ -542,7 +542,7 @@ reproducibility.
 </p>
 <p>
 The results in this page were generated with repository version
-<a href="https://github.com/rswaty/idaho_squirrels/tree/d40b1f9e4b1a2cd3ee65a1145711a9e49091469e" target="_blank">d40b1f9</a>.
+<a href="https://github.com/rswaty/idaho_squirrels/tree/3a6dd2fbb81e71df38cde527aba0f9d0a6661298" target="_blank">3a6dd2f</a>.
 See the <em>Past versions</em> tab to see a history of the changes made
 to the R Markdown and HTML files.
 </p>
@@ -603,6 +603,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/rswaty/idaho_squirrels/blob/3a6dd2fbb81e71df38cde527aba0f9d0a6661298/analysis/greasy_plays.Rmd" target="_blank">3a6dd2f</a>
+</td>
+<td>
+rswaty
+</td>
+<td>
+2024-06-25
+</td>
+<td>
+Publish the initial files for myproject
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/rswaty/idaho_squirrels/a9a77e66cdfdac3b8a00b2df20890cc5b2ffe508/docs/greasy_plays.html" target="_blank">a9a77e6</a>
+</td>
+<td>
+rswaty
+</td>
+<td>
+2024-06-25
+</td>
+<td>
+Build site.
+</td>
+</tr>
 <tr>
 <td>
 html
@@ -796,13 +830,18 @@ notes about this:</p>
 <li>Tidyverse is a set of packages, including ‘dplyr’ and ‘tidyr’. I
 removed loading those packages since loading ‘tidyverse’ will load
 them.</li>
-<li>I added the ‘formatR’ package to format your code. Most I did not
-want to manually reformat. Let me know what you think. See more at <a
-href="https://yihui.org/formatr/"
-class="uri">https://yihui.org/formatr/</a></li>
+<li>I added the ‘janitor’ package and used the ‘clean_names’ function
+below. Feel free to remove!</li>
+<li>See comments in my code. It is SUPER COMMON for Excel files to have
+crazy metadata at the top, have multiple rows with column names, etc. I
+inserted a little code to clean up. Feel free to modify and
+<strong>definitely</strong> check to see if there are any weird
+behaviors.</li>
 </ul>
-<p><strong>Ask Myles Walimaa how to deal with the dates as they are
-wack</strong></p>
+<div class="alert alert-info">
+<p><strong>NOTE!</strong> Ask Myles Walimaa how to deal with the dates
+as they are wack.</p>
+</div>
 <pre class="r"><code># Load necessary libraries
 library(readxl)
 library(tidyverse)
