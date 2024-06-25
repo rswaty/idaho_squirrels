@@ -117,12 +117,14 @@ The code was shared via Slack, so formatting may have been altered.  As pasted i
 In general it is a good idea to get packages and data loaded right away, which you did.  I will use a separate code chuck for this.  A few notes about this:
 
 * Tidyverse is a set of packages, including 'dplyr' and 'tidyr'. I removed loading those packages since loading 'tidyverse' will load them.
-* I added the 'formatR' package to format your code.  Most I did not want to manually reformat.  Let me know what you think.  See more at https://yihui.org/formatr/
+* I added the 'janitor' package and used the 'clean_names' function below.  Feel free to remove!
+* See comments in my code.  It is SUPER COMMON for Excel files to have crazy metadata at the top, have multiple rows with column names, etc.  I inserted a little code to clean up.  Feel free to modify and **definitely** check to see if there are any weird behaviors.
 
 
-**Ask Myles Walimaa how to deal with the dates as they are wack**
 
-
+<div class="alert alert-info">
+  <strong>NOTE!</strong> Ask Myles Walimaa how to deal with the dates as they are wack.
+</div>
 
 
 ```{r message=FALSE, warning=FALSE}
